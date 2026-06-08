@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ForgotPasswordForm } from "@/components/auth/forgot-password-form";
+import { AuthShell } from "@/components/shared/auth-shell";
 
 export const metadata: Metadata = {
   title: "Forgot Password",
@@ -7,8 +8,8 @@ export const metadata: Metadata = {
 
 export default function ForgotPasswordPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted/30 p-4">
+    <AuthShell>
       <ForgotPasswordForm />
-    </div>
+    </AuthShell>
   );
 }

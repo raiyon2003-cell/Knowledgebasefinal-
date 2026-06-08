@@ -13,11 +13,11 @@ import {
   UserCog,
   ScrollText,
   Settings,
-  BookOpen,
   Menu,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { NAV_ITEMS } from "@/lib/constants";
+import { BrandLogo } from "@/components/shared/brand-logo";
 import type { UserRole } from "@/types/database";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { Button } from "@/components/ui/button";
@@ -66,11 +66,10 @@ export function MobileNav({ role }: MobileNavProps) {
         <Menu className="h-5 w-5" />
         <span className="sr-only">Open menu</span>
       </SheetTrigger>
-      <SheetContent side="left" className="w-64 p-0">
-        <SheetHeader className="border-b p-4">
-          <SheetTitle className="flex items-center gap-2">
-            <BookOpen className="h-5 w-5" />
-            SegWitz KB
+      <SheetContent side="left" className="w-64 bg-sidebar p-0 text-sidebar-foreground">
+        <SheetHeader className="border-b border-sidebar-border p-4">
+          <SheetTitle className="flex items-center">
+            <BrandLogo variant="light" showSubtitle />
           </SheetTitle>
         </SheetHeader>
         <nav className="space-y-1 p-4">
@@ -87,8 +86,8 @@ export function MobileNav({ role }: MobileNavProps) {
                 className={cn(
                   "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                   isActive
-                    ? "bg-accent text-accent-foreground"
-                    : "text-muted-foreground hover:bg-accent/50"
+                    ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                    : "text-sidebar-foreground/75 hover:bg-white/10"
                 )}
               >
                 <Icon className="h-4 w-4" />

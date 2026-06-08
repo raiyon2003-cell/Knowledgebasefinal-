@@ -13,10 +13,10 @@ import {
   UserCog,
   ScrollText,
   Settings,
-  BookOpen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { NAV_ITEMS } from "@/lib/constants";
+import { BrandLogo } from "@/components/shared/brand-logo";
 import type { UserRole } from "@/types/database";
 import { LogoutButton } from "@/components/auth/logout-button";
 
@@ -48,13 +48,9 @@ export function Sidebar({ role }: SidebarProps) {
   });
 
   return (
-    <aside className="hidden w-64 shrink-0 border-r bg-sidebar lg:flex lg:flex-col">
-      <div className="flex h-16 items-center gap-2 border-b px-6">
-        <BookOpen className="h-6 w-6 text-primary" />
-        <div>
-          <p className="text-sm font-semibold">SegWitz</p>
-          <p className="text-xs text-muted-foreground">Knowledge Base</p>
-        </div>
+    <aside className="hidden w-64 shrink-0 border-r border-sidebar-border bg-sidebar lg:flex lg:flex-col">
+      <div className="flex h-16 items-center border-b border-sidebar-border px-6">
+        <BrandLogo variant="light" showSubtitle />
       </div>
       <nav className="flex-1 space-y-1 p-4">
         {visibleItems.map((item) => {
@@ -70,8 +66,8 @@ export function Sidebar({ role }: SidebarProps) {
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                 isActive
-                  ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                  : "text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+                  ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm"
+                  : "text-sidebar-foreground/75 hover:bg-white/10 hover:text-sidebar-foreground"
               )}
             >
               <Icon className="h-4 w-4" />

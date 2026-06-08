@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { BrandLogo } from "@/components/shared/brand-logo";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -62,10 +62,10 @@ export function LoginForm() {
   }
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className="w-full border-border/80 shadow-sm">
       <CardHeader className="text-center">
-        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-          <BookOpen className="h-6 w-6" />
+        <div className="mb-4 flex justify-center lg:hidden">
+          <BrandLogo />
         </div>
         <CardTitle className="text-2xl">{APP_NAME}</CardTitle>
         <CardDescription>Sign in to access the SOP repository</CardDescription>
