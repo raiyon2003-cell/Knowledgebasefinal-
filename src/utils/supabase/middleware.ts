@@ -1,6 +1,8 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+const AUTH_COOKIE_PREFIXES = ["sb-", "supabase-auth-token"];
+
 function isSupabaseConfigured() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -10,6 +12,16 @@ function isSupabaseConfigured() {
     !url.includes("your-project") &&
     key !== "your-anon-key"
   );
+}
+
+function clearAuthCookies(request: NextRequest, response: NextResponse) {
+  for (const cookie of request.cookies.getAll()) {
+    if (
+      AUTH_COOKIE_PREFIXES.some((prefix) => cookie.name.startsWith(prefix))
+    ) {
+      response.cookies.delete(cookie.name);
+    }
+  }
 }
 
 export async function updateSession(request: NextRequest) {
@@ -59,9 +71,25 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  let user = null;
+
+  try {
+    const {
+      data: { user: authUser },
+      error,
+    } = await supabase.auth.getUser();
+
+    if (error) {
+      throw error;
+    }
+
+    user = authUser;
+  } catch {
+    const response = NextResponse.next({ request });
+    clearAuthCookies(request, response);
+    supabaseResponse = response;
+    user = null;
+  }
 
   if (!user && !isPublicRoute) {
     const url = request.nextUrl.clone();
