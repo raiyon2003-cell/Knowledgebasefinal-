@@ -51,14 +51,30 @@ export async function POST(request: NextRequest) {
     return response;
   } catch (err) {
     console.error("Login error:", err);
-    return NextResponse.json(
-      {
-        error:
-          err instanceof Error
-            ? err.message
-            : "Unable to connect to authentication server",
-      },
-      { status: 500 }
-    );
+
+    const cause =
+      err instanceof Error && "cause" in err
+        ? (err.cause as { code?: string; hostname?: string } | undefined)
+        : undefined;
+
+    let message =
+      err instanceof Error
+        ? err.message
+        : "Unable to connect to authentication server";
+
+    if (cause?.code === "ENOTFOUND" || message === "fetch failed") {
+      const configuredUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      let host = cause?.hostname;
+      if (!host && configuredUrl) {
+        try {
+          host = new URL(configuredUrl).hostname;
+        } catch {
+          host = "unknown host";
+        }
+      }
+      message = `Cannot reach Supabase (${host || "unknown host"}). Update Vercel env vars NEXT_PUBLIC_SUPABASE_URL and keys, then redeploy.`;
+    }
+
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
